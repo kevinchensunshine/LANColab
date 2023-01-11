@@ -4,6 +4,7 @@ void Database::CreateTable(const std::string& table_name) {
   auto* db = new DbTable();
   tables_.insert(std::pair<std::string, DbTable*>(table_name, db));
 }
+
 void Database::DropTable(const std::string& table_name) {
   if (tables_.contains(table_name)) {
     delete tables_[table_name];
@@ -12,6 +13,7 @@ void Database::DropTable(const std::string& table_name) {
     throw std::runtime_error("table_name not found");
   }
 }
+
 DbTable& Database::GetTable(const std::string& table_name) {
   return *(tables_[table_name]);
 }
@@ -24,6 +26,7 @@ Database::Database(const Database& rhs) {
     tables_.insert(std::pair<std::string, DbTable*>(it.first, db));
   }
 }
+
 Database& Database::operator=(const Database& rhs) {
   if (&rhs != this) {
     tables_.clear();
@@ -39,6 +42,7 @@ Database& Database::operator=(const Database& rhs) {
   }
   return *this;
 }
+
 Database::~Database() {
   for (auto it = tables_.begin(); it != tables_.end(); it++) {
     delete it->second;

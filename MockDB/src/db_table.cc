@@ -2,10 +2,16 @@
 
 const unsigned int kRowGrowthRate = 2;
 
+
+//Dynamically deletes allocated memory based on the variable type by static casting void pointers
 void DbTable::Destruct() {
   for (auto it = rows_.begin(); it != rows_.end(); it++) {
     for (unsigned int row_idx = 0; row_idx < col_descs_.size(); row_idx++) {
       void* curr_ptr = it->second[row_idx];
+
+      //Common Motif throughout the codebase. Data is stored as its datatype, but it pointed to by a void**
+      //When it is needed to be accessed, it can be casted into the appropriate datatype. A parellel enum is 
+      //kept to facilitate this
       if (col_descs_[row_idx].second == DataType::kString) {
         auto* string = static_cast<std::string*>(curr_ptr);
         delete string;
@@ -17,12 +23,14 @@ void DbTable::Destruct() {
         delete row_double;
       }
     }
+    //
     delete[] it->second;
     it->second = nullptr;
   }
   rows_.clear();
 }
 
+//Deep copy of database by allocating memory pointed to by void pointers
 void DbTable::CopyRows(const DbTable& rhs) {
   for (auto it = rhs.rows_.begin(); it != rhs.rows_.end(); it++) {
     auto* arr = new void*[row_col_capacity_];
@@ -46,8 +54,8 @@ void DbTable::CopyRows(const DbTable& rhs) {
   }
 }
 
+//Dynamically change the row size for more storage
 void DbTable::ChangeRows() {
-  // do
   auto new_capacity = row_col_capacity_ * kRowGrowthRate;
   for (auto it : rows_) {
     auto* copy_rows = new void*[new_capacity];
@@ -65,6 +73,7 @@ void DbTable::ChangeRows() {
   row_col_capacity_ = new_capacity;
 }
 
+//Must dynamically adjust and do a deep copy
 void DbTable::AddColumn(const std::pair<std::string, DataType>& col_desc) {
   if (col_descs_.size() == row_col_capacity_) {
     auto new_capacity = row_col_capacity_ * kRowGrowthRate;
@@ -100,6 +109,7 @@ void DbTable::AddColumn(const std::pair<std::string, DataType>& col_desc) {
     }
   }
 }
+
 void DbTable::DeleteColumnByIdx(unsigned int col_idx) {
   if (col_idx > col_descs_.size() - 1) {
     throw std::out_of_range("col_idx out of rage");
@@ -150,6 +160,7 @@ void DbTable::AddRow(const std::initializer_list<std::string>& col_data) {
   next_unique_id_++;
 }
 
+//Dynamically deallocates memory based on value type
 void DbTable::DeleteRowById(unsigned int id) {
   auto it = rows_.find(id);
 
@@ -179,6 +190,7 @@ void DbTable::DeleteRowById(unsigned int id) {
   rows_.erase(it);
 }
 
+//Deep Copy
 DbTable::DbTable(const DbTable& rhs):
     next_unique_id_(rhs.next_unique_id_),
     row_col_capacity_(rhs.row_col_capacity_),
@@ -186,6 +198,7 @@ DbTable::DbTable(const DbTable& rhs):
   CopyRows(rhs);
 }
 
+//Deep Copy
 DbTable& DbTable::operator=(const DbTable& rhs) {
   if (&rhs != this) {
     Destruct();
@@ -196,8 +209,11 @@ DbTable& DbTable::operator=(const DbTable& rhs) {
   }
   return *this;
 }
+
+//Reuse Destruct
 DbTable::~DbTable() { Destruct(); }
 
+//For debugging
 std::ostream& operator<<(std::ostream& os, const DbTable& table) {
   auto last_val = table.col_descs_.size() - 1;
   for (const auto& element : table.col_descs_) {

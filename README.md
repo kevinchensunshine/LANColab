@@ -1,3 +1,7 @@
+# Updates
+
+Included a naive database to extend the server network to full stack. Currently, the two have not been connected, but the database has been tested individually to effectively store data relationally with dynamic columns. It will be able to be queried from the server in the future and retrieve data by ID. Hopefully, this can be used to create some interesting low-level projects that will further my understanding of high-level computer science concepts
+
 # Primitive Server
 
 Primitive Server contains my ongoing learning about network programming through the creation of a functional server and client. It runs simply by providing the same port and the host that the server is on through the command line, and can take up to 32 clients. Recently, I've used to in combination with a seeded random number generator to create a phrase of the day along with an echo response.
