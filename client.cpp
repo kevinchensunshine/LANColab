@@ -80,7 +80,7 @@ int main(int argc, const char* argv[]) {
     
     int read, sent = 0;
     std::string in_buf;
-    std::vector<uint8_t> tlv_buffer(IBUFSIZE);
+    std::vector<uint8_t> buffer(IBUFSIZE);
 
     while (1) {
         getline(std::cin, in_buf);
@@ -98,10 +98,10 @@ int main(int argc, const char* argv[]) {
             break;
         }
 
-        int bytes_read = recv(sock.get_socket(), (char *)(tlv_buffer.data()), (int)(tlv_buffer.size()), 0);
+        int bytes_read = recv(sock.get_socket(), (char *)(buffer.data()), (int)(buffer.size()), 0);
         
         if (bytes_read > 0) {
-            std::string output((char*)tlv_buffer.data(), bytes_read); 
+            std::string output((char*)buffer.data(), bytes_read); 
             std::cout << output << "\n";
             continue;
         } else {
