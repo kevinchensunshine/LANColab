@@ -88,7 +88,6 @@ static void serve_client(SOCKET s, std::string client_ip_addr, uint16_t client_p
     // allocate a fixed sized buffer that is large enough
     std::vector<uint8_t> buffer(BUFFER_INITIAL_SIZE);
 
-    // construct output file name
     while (1)
     {
         int bytes_read = recv(s, (char *)(buffer.data()), (int)(buffer.size()), 0);
@@ -105,8 +104,6 @@ static void serve_client(SOCKET s, std::string client_ip_addr, uint16_t client_p
         }
     }
 
-    
-    // output file will be closed automatically when the output_file_stream object goes out of scope
 #ifdef _WIN32
     closesocket(s);
 #else
