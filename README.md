@@ -1,6 +1,6 @@
-# Updates
+### LANColab
 
-Included a naive database to extend the server network to full stack. Currently, the two have not been connected, but the database has been tested individually to effectively store data relationally with dynamic columns. It will be able to be queried from the server in the future and retrieve data by ID. Hopefully, this can be used to create some interesting low-level projects that will further my understanding of high-level computer science concepts
+Ongoing project to create a native work collaboration engine powered on LAN connections allowing for flexible, wifi independant workspaces
 
 # Primitive Server
 
